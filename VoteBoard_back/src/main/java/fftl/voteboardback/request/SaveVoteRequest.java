@@ -2,10 +2,7 @@ package fftl.voteboardback.request;
 
 
 import fftl.voteboardback.entity.Vote;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -22,6 +19,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class SaveVoteRequest {
 
     private String voteId;
