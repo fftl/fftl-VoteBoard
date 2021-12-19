@@ -31,7 +31,11 @@ public class VoteController {
     @PostMapping
     public ResponseEntity saveVote(@RequestBody @Valid SaveVoteRequest saveVoteRequest, @RequestHeader Map<String, String> requestHeader){
         String userId = requestHeader.get("x-user-id");
-        if(userId == null || userId.length() != 4){
+        if(userId == null){
+            throw new BadRequest("존재하는 userId를 입력해주세요.");
+        }
+
+        if(userId.length() != 4){
             throw new BadRequest("올바른 userId를 입력해주세요.");
         }
 

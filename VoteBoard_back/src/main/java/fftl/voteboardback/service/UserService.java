@@ -6,6 +6,8 @@ import fftl.voteboardback.service.other.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class UserService {
@@ -28,6 +30,10 @@ public class UserService {
         userRepository.save(user);
 
         return userId;
+    }
+
+    public List<User> getAllUser() {
+        return userRepository.findAll();
     }
 
 }

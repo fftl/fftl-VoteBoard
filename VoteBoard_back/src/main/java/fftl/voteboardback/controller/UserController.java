@@ -1,5 +1,6 @@
 package fftl.voteboardback.controller;
 
+import fftl.voteboardback.entity.User;
 import fftl.voteboardback.response.BasicResponse;
 import fftl.voteboardback.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
@@ -25,5 +28,11 @@ public class UserController {
     public ResponseEntity saveUser(){
         String uId = userService.Save();
         return new ResponseEntity(new BasicResponse(true, uId ), HttpStatus.OK );
+    }
+
+    @GetMapping("/allUser")
+    public ResponseEntity getAllUser(){
+        List<User> users = userService.getAllUser();
+        return new ResponseEntity(new BasicResponse(true, users ), HttpStatus.OK );
     }
 }
