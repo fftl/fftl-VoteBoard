@@ -36,6 +36,9 @@ class VoteControllerTest {
     VoteService voteService;
 
     @Autowired
+    VoteRepository voteRepository;
+
+    @Autowired
     UserService userService;
 
     @Autowired
@@ -54,18 +57,18 @@ class VoteControllerTest {
     void saveVote() throws Exception{
         JsonObject Item1 = new JsonObject();
         Item1.addProperty("content", "찬성");
-        Item1.addProperty("voteId", "abcd");
+        Item1.addProperty("voteId", "osie");
         JsonObject Item2 = new JsonObject();
         Item2.addProperty("content", "반대");
-        Item2.addProperty("voteId", "abcd");
+        Item2.addProperty("voteId", "osie");
 
         JsonArray Items = new JsonArray();
         Items.add(Item1);
         Items.add(Item2);
 
         JsonObject obj = new JsonObject();
-        obj.addProperty("voteId","abcd");
-        obj.addProperty("boardId",1L);
+        obj.addProperty("voteId","osie");
+        obj.addProperty("boardId",2L);
         obj.addProperty("title","제목");
         obj.addProperty("description","내용");
         obj.add("voteItemRequest", Items);
@@ -88,14 +91,17 @@ class VoteControllerTest {
             .andExpect((jsonPath("$.message").doesNotExist()));
     }
 
+    @DisplayName("투표 조회하기 테스트")
     @Test
-    void getVote() {
+    void getVote() throws Exception{
         ResultActions actions = mvc.perform(
-            post("/vote/1/abcd")
+            get("/vote/1/abcd")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .characterEncoding("UTF-8")
-                    .header("x-user-id", "fftl");
+                    .header("x-user-id", "fftl"));
+
+        actions.andDo(print());
     }
 
     @Test
@@ -107,7 +113,15 @@ class VoteControllerTest {
     }
 
     @Test
-    void allVote() {
+    void allVote() throws Exception{
+        ResultActions actions = mvc.perform(
+            get("/vote")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .characterEncoding("UTF-8")
+                    .header("x-user-id", "fftl"));
+
+        actions.andDo(print());
     }
 
     @Test

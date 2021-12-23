@@ -71,6 +71,8 @@ public class VoteService {
      * 투표 조회 API
      * */
     public GetVoteResponse getOne(String userId, Long boardId, String voteId){
+        System.out.println("service!!!!!!!!!!!!!!!!!!!!!!!");
+        System.out.println(voteId);
         Vote vote = voteRepository.findById(voteId).orElseThrow(() -> new BadRequest("잘못된 투표 id 입니다."));
 
         List<VoteItem> Items = voteItemRepository.findByVoteId(voteId);
