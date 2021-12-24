@@ -29,12 +29,6 @@ class UserControllerTest {
     private MockMvc mvc;
 
     @Autowired
-    UserService userService;
-
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
     public void setMvc(MockMvc mvc){
         this.mvc = mvc;
     }
@@ -63,6 +57,8 @@ class UserControllerTest {
                 .accept(MediaType.APPLICATION_JSON));
 
         actions
-            .andDo(print());
+            .andDo(print())
+            .andExpect(jsonPath("$.success").value(true))
+            .andExpect(jsonPath("$.data").exists());
     }
 }

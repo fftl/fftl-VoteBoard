@@ -69,3 +69,8 @@ Long voteUserId;
 String voteId;
 String userId;
 ```
+
+### 테스트코드 작성
+
+테스트 코드는 SpringBootTest를 이용한 통합테스트로 컨트롤러 테스트를 진행했습니다. JsonObject을 이용해서 
+Request 값을 생성을 해주었고 이를 mvc perform을 이용해서 테스트를 진행했습니다.

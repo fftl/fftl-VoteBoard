@@ -6,7 +6,6 @@ import fftl.voteboardback.advice.AdviceController;
 import fftl.voteboardback.repository.VoteRepository;
 import fftl.voteboardback.service.UserService;
 import fftl.voteboardback.service.VoteService;
-import org.json.JSONObject;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,13 +15,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -101,17 +98,48 @@ class VoteControllerTest {
                     .characterEncoding("UTF-8")
                     .header("x-user-id", "fftl"));
 
-        actions.andDo(print());
+        actions.andDo(print())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data").exists());
     }
 
+    @DisplayName("투표하기 테스트")
     @Test
-    void goVote() {
+    void goVote() throws Exception{
+        JsonObject obj = new JsonObject();
+        obj.addProperty("boardId", 1L);
+        obj.addProperty("voteId","abcd");
+        obj.addProperty("voteItemId", 2L);
+
+        ResultActions actions = mvc.perform(
+            patch("/vote")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .characterEncoding("UTF-8")
+                    .header("x-user-id", "fftl")
+                    .content(String.valueOf(obj)));
+
+        actions.andDo(print())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data").exists());
     }
 
+    @DisplayName("내가 작성한 투표 가져오기 테스트")
     @Test
-    void myVote() {
+    void myVote() throws Exception{
+        ResultActions actions = mvc.perform(
+            get("/vote/myVote")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .characterEncoding("UTF-8")
+                    .header("x-user-id", "fftl"));
+
+        actions.andDo(print())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data").exists());
     }
 
+    @DisplayName("모든 투표 목록 가져오기 테스트")
     @Test
     void allVote() throws Exception{
         ResultActions actions = mvc.perform(
@@ -121,10 +149,23 @@ class VoteControllerTest {
                     .characterEncoding("UTF-8")
                     .header("x-user-id", "fftl"));
 
-        actions.andDo(print());
+        actions.andDo(print())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data").exists());
     }
 
+    @DisplayName("투표 여부 확인 테스트")
     @Test
-    void checkVote() {
+    void checkVote() throws Exception{
+        ResultActions actions = mvc.perform(
+            get("/vote/abcd")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .characterEncoding("UTF-8")
+                    .header("x-user-id", "fftl"));
+
+        actions.andDo(print())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data").exists());
     }
 }
