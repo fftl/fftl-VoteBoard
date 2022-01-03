@@ -2,11 +2,11 @@
 
 ### 개요
 
-Vue.js를 이용한 간단한 클라이언트와 java, spring boot를 이용한 API서버를 이용해 만든 투표 게시판 만들기 프로젝트 입니다. Vue.js는 서버를 테스트 해보기 위한 정도로 간단하게 만들어 보았고, 주 목적인 서버는 spring boot와 jpa를 이용해서 만들어 보았습니다.
+투표를 할 수 있는 게시판을 만들어 보았습니다. 투표 기능 자체에 집중을 하기 때문에 아이디만을 가지게 됩니다. 프로젝트는 Vue.js를 이용한 간단한 클라이언트와 SpringBoot를 이용한 REST API서버로 실행됩니다.
 
 ### 사용기술
 
--   Java, Spring Boot, JPA, gradle, git
+-   Java, Spring Boot, H2, JPA, gradle, git
 
 ### 구현기능
 
@@ -20,57 +20,49 @@ Vue.js를 이용한 간단한 클라이언트와 java, spring boot를 이용한 
 
 ### DB설계
 
-이번 프로젝트에서 가장 고민한 부분 입니다. 투표가 이루어지는 부분에 대해서 어떻게 구상해야하나 고민을 해봤습니다. 일단 지금 상태에서 생각할 수 있는 좋은 설계를 해보았습니다.
+이번 프로젝트에서 가장 고민한 부분 입니다. 투표가 이루어지는 부분에 대해서 어떻게 구상해야하나 고민을 해봤습니다. 테이블은 **User, Vote(투표), VoteItem(투표항목), VoteUser(투표한 유저)** 이렇게 네 가지로 구성됩니다. Vote가 존재하며 Vote안에 2개 이상의 VoteItem이 존재하게 됩니다. 한 명의 유저는 하나의 투표에 한번만 참여할 수 있기 때문에 투표 참여 여부를 판단하기 위해 VoteUser를 사용합니다.
 
 ```java
 User
 
-//pk
 String userId;
 ```
 
 ```java
 Vote
 
-//pk
 String voteId;
-
-//content
 String title;
 String description;
 String deadLine;
-
-//fk
 String userId;
 Long boardId;
+
 ```
 
 ```java
 VoteItem
 
-//pk
 Long voteItemId;
-
-//content
 String content;
 Long cnt;
-
-//fk
 String voteId;
+
 ```
 
 ```java
 VoteUser
 
-//pk
 Long voteUserId;
-
-//fk
 String voteId;
 String userId;
+
 ```
 
-### 테스트코드 작성
+### 프로젝트 후기
 
-테스트 코드는 SpringBootTest를 이용한 통합테스트로 컨트롤러 테스트를 진행했습니다. JsonObject을 이용해서 
-Request 값을 생성을 해주었고 이를 mvc perform을 이용해서 테스트를 진행했습니다.
+일단 해당 프로젝트는 과거에 진행했던 과제 프로젝트를 정리하고, 테스트 코드를 작성해 본 프로젝트입니다. 해당 과제의 요구사항을 따라 DB에 foreign key를 작성하였고 이로 인해 연관관계 맵핑은 따로 사용하지 않았습니다.
+
+### **_테스트코드 사용_**
+
+테스트 코드는 최근에 추가하였습니다. 이전 프로젝트에 처음으로 테스트 코드를 작성할 때에는 무조건 단위 테스트가 좋은 것 인줄 알고 Controller 테스트지만 단위테스트로 진행했고 Service의 기능들을 willReturn을 이용하여 진행했습니다. 하지만 이번에는 @SpringBootTest를 이용하였고, data.sql을 이용해 테스트용 데이터를 셋팅해 놓는 등의 방법을 사용해 조금 더 좋은 테스트를 작성할 수 있었습니다.
